@@ -3,11 +3,14 @@ import pygame
 from pygame.locals import QUIT, MOUSEBUTTONDOWN
 
 pygame.init()
-SURFACE_X_SIZE = 1920
-SURFACE_Y_SIZE = 1080
+ORIGIN_X_SIZE = 128
+ORIGIN_Y_SIZE = 128
+SCALE = 6
+SURFACE_X_SIZE = ORIGIN_X_SIZE * SCALE
+SURFACE_Y_SIZE = ORIGIN_Y_SIZE * SCALE
 SURFACE = pygame.display.set_mode((SURFACE_X_SIZE, SURFACE_Y_SIZE))
 FPSCLOCK = pygame.time.Clock()
-pygame.display.set_caption("LootChestSystem")
+pygame.display.set_caption("PixelArt_LootChest")
 
 # クラス: チェスト
 class Chest:
@@ -35,6 +38,7 @@ class Chest:
             status = "empty"
 
         self.new_image = pygame.transform.rotate(self.image, self.theta)
+        #self.new_image = pygame.transform.scale_by(self.new_image, SCALE)
         self.rect = self.new_image.get_rect()
         self.rect.center = (self.pos[0], self.pos[1])
 
@@ -74,7 +78,7 @@ def main():
         chest.tick()
         SURFACE.fill((255, 255, 255))
         chest.draw()
-        print(f"status={status}, next_status={next_status}")
+        #print(f"status={status}, next_status={next_status}")
         if next_status == " ":
             next_status = "standby"
         if status == "empty":
