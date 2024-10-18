@@ -11,6 +11,7 @@ pygame.display.set_caption("LootChestSystem")
 
 # クラス: チェスト
 class Chest:
+
     # コンストラクタ
     def __init__(self, pos, path):
         self.image = pygame.image.load(path)
@@ -47,13 +48,15 @@ class Chest:
     def draw(self):
         SURFACE.blit(self.new_image, self.rect)
 
+
 status = "standby"
 process = 0
 def main():
+
     global status
     global process
     next_status = " "
-    chest = Chest((SURFACE_X_SIZE / 2, SURFACE_Y_SIZE / 2), "chest.png")
+    chest = Chest((SURFACE_X_SIZE / 2, SURFACE_Y_SIZE / 2), "./image/chest.png")
 
     while True:
         for event in pygame.event.get():
@@ -62,17 +65,24 @@ def main():
                 sys.exit()
             elif event.type == MOUSEBUTTONDOWN:
                 if event.dict["button"] == 3:
-                    pygame.quit()
-                    sys.exit()
-                next_status = "open"
+                    #pygame.quit()
+                    #sys.exit()
+                    next_status = "standby"
+                else:
+                    next_status = "open"
         
         chest.tick()
-
         SURFACE.fill((255, 255, 255))
         chest.draw()
+        print(f"status={status}, next_status={next_status}")
+        if next_status == " ":
+            next_status = "standby"
+        if status == "empty":
+            process = -1
+            status = next_status
 
-        if status == "empty" and next_status == " ":
-            status = "standby"
+        if process % 1000 == 0 and status == "open":
+            status = "empty"
 
         process += 1
         pygame.display.update()
