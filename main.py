@@ -94,3 +94,11 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+"""
+N = 0
+N = N + 3286
+N = N * 4736
+N = N % 12312
+print(N)
+"""
