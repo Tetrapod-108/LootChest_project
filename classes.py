@@ -1,6 +1,7 @@
 import pygame
 
 import global_variable as g
+import sound as s
 
 # クラス: 背景
 class Background:
@@ -77,6 +78,7 @@ class Chest:
             self.verocity = 9.8 * g.process % max_process
             self.pos[1] += self.verocity
         if g.process % max_process == max_process - 1:
+            s.play_sound("sound/drop.mp3", 0.5)
             g.status = "empty"
             g.next_status = "standby"
 
@@ -94,6 +96,8 @@ class Chest:
     # g.status = "standby"時に実行
     def standby(self):
         max_process = 100
+        if g.process % max_process == 0:
+            s.play_sound("sound/standby.mp3", 0.5)
         if 0 <= g.process % max_process < 4:
             self.theta -= 3
         if 4 <= g.process % max_process < 12:
@@ -112,6 +116,8 @@ class Chest:
     # g.status = "zoom"時に実行
     def zoom(self):
         max_process = 90
+        if g.process % max_process == 10:
+            s.play_sound("sound/lock_open.mp3", 0.5)
         if 0 <= g.process % max_process < 2:
             offset = 0.3
         if 2 <= g.process % max_process < 3:
