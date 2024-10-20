@@ -211,6 +211,8 @@ class Freeze:
     # g.status = "freeze"時に実行
     def freeze(self):
         max_process = 90
+        if g.process % max_process == 1:
+            s.play_sound("sound/freeze.mp3", 1.0)
         if 0 <= g.process % max_process < 4:
             self.new_image = pygame.image.load("image/freeze_frame3.png")
         if 4 <= g.process % max_process < 8:
