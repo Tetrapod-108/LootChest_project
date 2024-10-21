@@ -7,11 +7,9 @@ database = [["001"],
             ["101"]]
 
 def lottery():
-    rnd = random.randint(1, 100)
+    rnd = random.randint(0, 99)
     if 0 <= rnd < 90:
         result = random.choice(database[0])
     if 90 <= rnd < 100:
         result = random.choice(database[1])
     return result
-
-print(lottery())

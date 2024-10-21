@@ -10,6 +10,6 @@ SURFACE = pygame.display.set_mode((SURFACE_X_SIZE, SURFACE_Y_SIZE))
 FPSCLOCK = pygame.time.Clock()
 
 # シーンのステータスを管理するグローバル変数
-status = "empty"
+status = "opening"
 next_status = "empty"
 process = 0

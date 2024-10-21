@@ -1,6 +1,6 @@
 import sys
 import pygame
-from pygame.locals import QUIT, KEYDOWN, MOUSEBUTTONDOWN, K_SPACE
+from pygame.locals import QUIT, KEYDOWN, MOUSEBUTTONDOWN, K_SPACE, K_r
 
 import global_variable as g
 import classes
@@ -32,9 +32,14 @@ def main():
                         g.next_status = "zoom"
             elif event.type == KEYDOWN:
                 if event.key == K_SPACE:
-                    if g.status == "empty":
+                    if g.status == "opening":
+                        g.status = "empty"
                         lottery_result = lottery.lottery()
                         g.next_status = "drop"
+                if event.key == K_r:
+                    if g.status == "result":
+                        g.status = "empty"
+                        g.next_status = "opening"
 
         background.tick()
         chest.tick()

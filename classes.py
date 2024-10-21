@@ -13,6 +13,11 @@ class Background:
         self.pos = pos
         self.scale = 1.0
     
+    # g.status = "opening"時に実行
+    def opening(self):
+        self.scale = 1.0
+        self.image = pygame.image.load("image/background.png")
+
     # g.status = "drop"時に実行
     def drop(self):
         max_process = 31
@@ -45,8 +50,8 @@ class Background:
 
     # 毎tick実行
     def tick(self):
-        #if g.status == "standby":
-            #self.standby()
+        if g.status == "opening":
+            self.opening()
         if g.status == "zoom":
             self.zoom()
         if g.status == "drop":
@@ -68,13 +73,22 @@ class Chest:
         self.image = pygame.image.load(path)
         self.new_image = pygame.image.load(path)
         self.pos = pos
+        self.pos_start = pos
+        print(self.pos_start)
         self.theta = 0
         self.scale = 1.0
         self.verocity = 0
     
+    # g.status = "opening"時に実行
+    def opening(self):
+        self.scale = 1.0
+        self.pos[1] = -100
+        self.new_image = pygame.image.load("image/chest.png")
+
     # g.status = "drop"時に実行
     def drop(self):
         max_process = 31
+        print(self.pos)
         if 0 <= g.process % max_process < max_process:
             self.verocity = 9.8 * g.process % max_process
             self.pos[1] += self.verocity
@@ -144,6 +158,8 @@ class Chest:
 
     # 毎tick実行
     def tick(self):
+        if g.status == "opening":
+            self.opening()
         if g.status == "standby":
             self.standby()
         if g.status == "open":
@@ -173,6 +189,10 @@ class Flash:
         self.theta = 0
         self.scale = 2.0
     
+    # g.status = "opening"時に実行
+    def opening(self):
+        self.scale = 2.0
+
     # g.status = "result"時に実行
     def result(self):
         self.theta += 1
@@ -185,6 +205,8 @@ class Flash:
 
     # 毎tick実行
     def tick(self):
+        if g.status == "opening":
+            self.opening()
         if g.status == "result":
             self.result()
 
