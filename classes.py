@@ -28,10 +28,6 @@ class Background:
         if 20 <= g.process % max_process < max_process:
             self.image = pygame.image.load("image/background4.png")
 
-    # g.status = "standby"時に実行
-    #def standby(self):
-    #    print("a")
-
     # g.status = "zoom"時に実行
     def zoom(self):
         max_process = 90
@@ -74,7 +70,6 @@ class Chest:
         self.new_image = pygame.image.load(path)
         self.pos = pos
         self.pos_start = pos
-        print(self.pos_start)
         self.theta = 0
         self.scale = 1.0
         self.verocity = 0
@@ -88,12 +83,11 @@ class Chest:
     # g.status = "drop"時に実行
     def drop(self):
         max_process = 31
-        print(self.pos)
         if 0 <= g.process % max_process < max_process:
             self.verocity = 9.8 * g.process % max_process
             self.pos[1] += self.verocity
         if g.process % max_process == max_process - 1:
-            s.play_sound("sound/drop.mp3", 0.5)
+            s.play_sound("sound/drop.wav", 0.5)
             g.status = "empty"
             g.next_status = "standby"
 
@@ -112,7 +106,7 @@ class Chest:
     def standby(self):
         max_process = 100
         if g.process % max_process == 0:
-            s.play_sound("sound/standby.mp3", 0.5)
+            s.play_sound("sound/standby.wav", 0.5)
         if 0 <= g.process % max_process < 4:
             self.theta -= 3
         if 4 <= g.process % max_process < 12:
@@ -146,6 +140,8 @@ class Chest:
     # g.status = "open"時に実行
     def open(self):
         max_process = 24
+        if g.process % max_process == 0:
+            s.play_sound("sound/open.mp3", 1.0)
         if 0 <= g.process % max_process < 4:
             self.new_image = pygame.image.load("image/chest_frame2.png")
         if 4 <= g.process % max_process < 8:
