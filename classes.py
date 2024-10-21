@@ -2,8 +2,9 @@ import pygame
 
 import global_variable as g
 import sound as s
+import lottery
 
-# クラス: 背景
+# クラス: 背景用
 class Background:
 
     # コンストラクタ
@@ -59,7 +60,7 @@ class Background:
         g.SURFACE.blit(self.new_image, self.rect)
 
 
-# クラス: チェスト
+# クラス: チェスト用
 class Chest:
 
     # コンストラクタ
@@ -161,7 +162,7 @@ class Chest:
 
 
 
-# クラス: フラッシュ
+# クラス: リザルト後のフラッシュ用
 class Flash:
 
     # コンストラクタ
@@ -197,7 +198,7 @@ class Flash:
 
 
 
-# クラス: フリーズ
+# クラス: フリーズ演出用
 class Freeze:
 
     # コンストラクタ
@@ -235,4 +236,42 @@ class Freeze:
         self.rect = after_zoom_image.get_rect()
         self.rect.center = (self.pos[0], self.pos[1])
         if g.status == "freeze":
+            g.SURFACE.blit(after_zoom_image, self.rect)
+
+
+# クラス: 抽選結果表示用
+class Display():
+    
+    # コンストラクタ
+    def __init__(self, pos):
+        self.pos = pos
+        #self.image = pygame.image.load(path)
+        #self.new_image = pygame.image.load(path)
+        self.pos = pos
+        self.theta = 0
+        self.scale = 1.0
+
+    #g.status = "result"時に実行
+    def result(self, val):
+        max_process = 100
+        self.new_image = pygame.image.load(f"image/display/{val}.png")
+        if 0 <= g.process % max_process < 50: 
+            self.scale += 0.005
+        if 50 <= g.process % max_process < 100: 
+            self.scale -= 0.005
+
+
+    # 毎tick実行
+    def tick(self, lottery_result):
+        if lottery_result == " ":
+            return
+        if g.status == "result":
+            self.result(lottery_result)
+    
+    # 描画を更新
+    def draw(self):
+        if g.status == "result":
+            after_zoom_image = pygame.transform.scale_by(self.new_image, self.scale)
+            self.rect = after_zoom_image.get_rect()
+            self.rect.center = (self.pos[0], self.pos[1])
             g.SURFACE.blit(after_zoom_image, self.rect)
