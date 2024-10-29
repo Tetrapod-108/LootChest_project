@@ -40,9 +40,6 @@ class Background:
         if 5 <= g.process % max_process < max_process:
             offset = 0
         self.scale = self.scale + offset
-        if g.process % max_process == max_process - 1:
-            g.status = "empty"
-            g.next_status = "open"
 
     # 毎tick実行
     def tick(self):
@@ -73,9 +70,11 @@ class Chest:
         self.theta = 0
         self.scale = 1.0
         self.verocity = 0
+        self.isgold = False
     
     # g.status = "opening"時に実行
     def opening(self):
+        self.isgold = False
         self.scale = 1.0
         self.pos[1] = -100
         self.new_image = pygame.image.load("image/chest.png")
@@ -88,17 +87,6 @@ class Chest:
             self.pos[1] += self.verocity
         if g.process % max_process == max_process - 1:
             s.play_sound("sound/drop.wav", 0.5)
-            g.status = "empty"
-            g.next_status = "standby"
-
-    # g.status = "superdrop"時に実行
-    def superdrop(self):
-        max_process = 32
-        if 0 <= g.process % max_process < max_process:
-            self.verocity = 9.8 * g.process % max_process
-            self.pos[1] += self.verocity
-        self.pos[1] = -100
-        if g.process % max_process == max_process - 1:
             g.status = "empty"
             g.next_status = "standby"
 
@@ -122,10 +110,32 @@ class Chest:
             g.status = "empty"
         self.new_image = pygame.transform.rotate(self.image, self.theta)
 
+    # g.status = "gold_standby"時に実行
+    def gold_standby(self):
+        self.isgold = True
+        self.new_image = pygame.image.load("image/g_chest.png")
+        max_process = 100
+        if g.process % max_process == 0:
+            s.play_sound("sound/standby.wav", 0.5)
+        if 0 <= g.process % max_process < 4:
+            self.theta -= 3
+        if 4 <= g.process % max_process < 12:
+            self.theta += 3
+        if 12 <= g.process % max_process < 20:
+            self.theta -= 3
+        if 20 <= g.process % max_process < 24:
+            self.theta += 3
+        if 24 <= g.process % max_process < max_process:
+            if g.next_status != "gold_standby":
+                g.status = "empty"
+        if g.process % max_process == max_process - 1:
+            g.status = "empty"
+        self.new_image = pygame.transform.rotate(self.new_image, self.theta)
+
     # g.status = "zoom"時に実行
     def zoom(self):
         max_process = 90
-        if g.process % max_process == 10:
+        if g.process % max_process == 0:
             s.play_sound("sound/lock_open.mp3", 0.5)
         if 0 <= g.process % max_process < 2:
             offset = 0.3
@@ -136,11 +146,17 @@ class Chest:
         if 5 <= g.process % max_process < max_process:
             offset = 0
         self.scale = self.scale + offset
+        if g.process % max_process == max_process - 1:
+            g.status = "empty"
+            if self.isgold == True:
+                g.next_status = "gold_open"
+            else:
+                g.next_status = "open"
         
     # g.status = "open"時に実行
     def open(self):
         max_process = 24
-        if g.process % max_process == 0:
+        if g.process % max_process == 23:
             s.play_sound("sound/open.mp3", 1.0)
         if 0 <= g.process % max_process < 4:
             self.new_image = pygame.image.load("image/chest_frame2.png")
@@ -152,14 +168,33 @@ class Chest:
             g.status = "empty"
             g.next_status = "result"
 
+    # g.status = "gold_open"時に実行
+    def gold_open(self):
+        max_process = 24
+        if g.process % max_process == 23:
+            s.play_sound("sound/open.mp3", 1.0)
+        if 0 <= g.process % max_process < 4:
+            self.new_image = pygame.image.load("image/g_chest_frame2.png")
+        if 4 <= g.process % max_process < 8:
+            self.new_image = pygame.image.load("image/g_chest_frame3.png")
+        if 12 <= g.process % max_process < 16:
+            self.new_image = pygame.image.load("image/g_chest_frame4.png")
+        if g.process % max_process == max_process - 1:
+            g.status = "empty"
+            g.next_status = "result"
+
     # 毎tick実行
     def tick(self):
         if g.status == "opening":
             self.opening()
         if g.status == "standby":
             self.standby()
+        if g.status == "gold_standby":
+            self.gold_standby()
         if g.status == "open":
             self.open()
+        if g.status == "gold_open":
+            self.gold_open()
         if g.status == "zoom":
             self.zoom()
         if g.status == "drop":
@@ -241,6 +276,7 @@ class Freeze:
         if 16 <= g.process % max_process < max_process:
             self.new_image = pygame.image.load("image/freeze_frame3.png")
         if g.process % max_process == max_process - 1:
+            g.next_status = "gold_standby"
             g.status = "empty"
 
     # 毎tick実行
