@@ -86,7 +86,7 @@ class Chest:
             self.verocity = 9.8 * g.process % max_process
             self.pos[1] += self.verocity
         if g.process % max_process == max_process - 1:
-            s.play_sound("sound/drop.wav", 0.5)
+            s.play_sound("sound/drop.wav", 0.8)
             g.status = "empty"
             g.next_status = "standby"
 
@@ -94,7 +94,7 @@ class Chest:
     def standby(self):
         max_process = 100
         if g.process % max_process == 0:
-            s.play_sound("sound/standby.wav", 0.5)
+            s.play_sound("sound/standby.wav", 0.8)
         if 0 <= g.process % max_process < 4:
             self.theta -= 3
         if 4 <= g.process % max_process < 12:
@@ -116,7 +116,7 @@ class Chest:
         self.new_image = pygame.image.load("image/g_chest.png")
         max_process = 100
         if g.process % max_process == 0:
-            s.play_sound("sound/standby.wav", 0.5)
+            s.play_sound("sound/g_standby.mp3", 0.5)
         if 0 <= g.process % max_process < 4:
             self.theta -= 3
         if 4 <= g.process % max_process < 12:
@@ -136,7 +136,7 @@ class Chest:
     def zoom(self):
         max_process = 90
         if g.process % max_process == 0:
-            s.play_sound("sound/lock_open.mp3", 0.5)
+            s.play_sound("sound/lock_open.mp3", 1.0)
         if 0 <= g.process % max_process < 2:
             offset = 0.3
         if 2 <= g.process % max_process < 3:
@@ -172,7 +172,7 @@ class Chest:
     def gold_open(self):
         max_process = 24
         if g.process % max_process == 23:
-            s.play_sound("sound/open.mp3", 1.0)
+            s.play_sound("sound/open.mp3", 0.3)
         if 0 <= g.process % max_process < 4:
             self.new_image = pygame.image.load("image/g_chest_frame2.png")
         if 4 <= g.process % max_process < 8:
@@ -226,12 +226,12 @@ class Flash:
 
     # g.status = "result"時に実行
     def result(self):
-        self.theta += 1
+        self.theta += 0.5
         max_process = 100
         if 0 <= g.process % max_process < 50: 
-            self.scale += 0.005
+            self.scale += 0.002
         if 50 <= g.process % max_process < 100: 
-            self.scale -= 0.005
+            self.scale -= 0.002
         self.new_image = pygame.transform.rotate(self.image, self.theta)
 
     # 毎tick実行
@@ -308,11 +308,13 @@ class Display():
     #g.status = "result"時に実行
     def result(self, val):
         max_process = 100
+        if g.process % max_process == 0:
+            self.scale = 1.0
         self.new_image = pygame.image.load(f"image/display/{val}.png")
         if 0 <= g.process % max_process < 50: 
-            self.scale += 0.005
+            self.scale += 0.002
         if 50 <= g.process % max_process < 100: 
-            self.scale -= 0.005
+            self.scale -= 0.002
 
 
     # 毎tick実行
