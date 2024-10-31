@@ -172,7 +172,7 @@ class Chest:
     def gold_open(self):
         max_process = 24
         if g.process % max_process == 23:
-            s.play_sound("sound/open.mp3", 0.3)
+            s.play_sound("sound/g_open.mp3", 0.9)
         if 0 <= g.process % max_process < 4:
             self.new_image = pygame.image.load("image/g_chest_frame2.png")
         if 4 <= g.process % max_process < 8:
@@ -225,7 +225,7 @@ class Title:
 
     # g.status = "freeze"時に実行
     def freeze(self):
-        max_process = 120
+        max_process = 90
         if 16 <= g.process % max_process < max_process:
             self.new_image = pygame.image.load("image/title2.png")
 
@@ -244,7 +244,7 @@ class Title:
         if g.status == "opening":
             g.SURFACE.blit(after_zoom_image, self.rect)
         if g.status == "freeze":
-            max_process = 120
+            max_process = 90
             if 16 <= g.process % max_process < max_process:
                 g.SURFACE.blit(after_zoom_image, self.rect)
 
@@ -305,7 +305,7 @@ class Freeze:
     
     # g.status = "freeze"時に実行
     def freeze(self):
-        max_process = 120
+        max_process = 90
         if g.process % max_process == 1:
             s.play_sound("sound/freeze.mp3", 1.0)
         if 0 <= g.process % max_process < 4:
