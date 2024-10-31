@@ -27,13 +27,10 @@ def main():
                 pygame.quit()
                 sys.exit()
             elif event.type == MOUSEBUTTONDOWN:
-                if event.dict["button"] == 3:
-                    g.next_status = "freeze"
-                else:
-                    if g.status == "standby":
-                        g.next_status = "zoom"
-                    if g.status == "gold_standby":
-                        g.next_status = "zoom"
+                if g.status == "standby":
+                    g.next_status = "zoom"
+                if g.status == "gold_standby":
+                    g.next_status = "zoom"
             elif event.type == KEYDOWN:
                 if event.key == K_SPACE:
                     if g.status == "opening":
@@ -65,7 +62,13 @@ def main():
             g.process = -1
             g.status = g.next_status
             if g.next_status == "standby":
-                g.next_status = "standby"
+                tmp = int(lottery_result)
+                print(f"tmp = {tmp}")
+                print(f"tmp / 100 = {int(tmp / 100)}")
+                if int(tmp / 100) == 1:
+                    g.next_status = "freeze"
+                else:
+                    g.next_status = "standby"
             elif g.next_status == "gold_standby":
                 g.next_status = "gold_standby"
             else:

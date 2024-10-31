@@ -221,7 +221,7 @@ class Title:
     
     # g.status = "opening"時に実行
     def opening(self):
-        self.scale = 1.0
+        self.new_image = pygame.image.load("image/title.png")
 
     # g.status = "freeze"時に実行
     def freeze(self):
