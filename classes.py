@@ -208,6 +208,47 @@ class Chest:
         g.SURFACE.blit(after_zoom_image, self.rect)
 
 
+# クラス: タイトル用
+class Title:
+
+    # コンストラクタ
+    def __init__(self, pos, path):
+        self.image = pygame.image.load(path)
+        self.new_image = pygame.image.load(path)
+        self.pos = pos
+        self.theta = 0
+        self.scale = 1.0
+    
+    # g.status = "opening"時に実行
+    def opening(self):
+        self.scale = 1.0
+
+    # g.status = "freeze"時に実行
+    def freeze(self):
+        max_process = 120
+        if 16 <= g.process % max_process < max_process:
+            self.new_image = pygame.image.load("image/title2.png")
+
+    # 毎tick実行
+    def tick(self):
+        if g.status == "opening":
+            self.opening()
+        if g.status == "freeze":
+            self.freeze()
+    
+    # 描画を更新
+    def draw(self):
+        after_zoom_image = pygame.transform.scale_by(self.new_image, self.scale)
+        self.rect = after_zoom_image.get_rect()
+        self.rect.center = (self.pos[0], self.pos[1])
+        if g.status == "opening":
+            g.SURFACE.blit(after_zoom_image, self.rect)
+        if g.status == "freeze":
+            max_process = 120
+            if 16 <= g.process % max_process < max_process:
+                g.SURFACE.blit(after_zoom_image, self.rect)
+
+
 
 # クラス: リザルト後のフラッシュ用
 class Flash:
@@ -264,7 +305,7 @@ class Freeze:
     
     # g.status = "freeze"時に実行
     def freeze(self):
-        max_process = 90
+        max_process = 120
         if g.process % max_process == 1:
             s.play_sound("sound/freeze.mp3", 1.0)
         if 0 <= g.process % max_process < 4:

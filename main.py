@@ -5,6 +5,7 @@ from pygame.locals import QUIT, KEYDOWN, MOUSEBUTTONDOWN, K_SPACE, K_r
 import global_variable as g
 import classes
 import lottery
+import sound as s
 
 pygame.init()
 pygame.display.set_caption("PixelArt_LootChest")
@@ -16,6 +17,7 @@ def main():
     flash = classes.Flash((g.SURFACE_X_SIZE / 2, g.SURFACE_Y_SIZE / 2), "image/flash.png")
     freeze = classes.Freeze((g.SURFACE_X_SIZE / 2, g.SURFACE_Y_SIZE / 2), "image/freeze.png")
     display = classes.Display((g.SURFACE_X_SIZE / 2, g.SURFACE_Y_SIZE / 2))
+    title = classes.Title((g.SURFACE_X_SIZE / 2, g.SURFACE_Y_SIZE / 2), "image/title.png")
 
     lottery_result = " "
 
@@ -35,6 +37,7 @@ def main():
             elif event.type == KEYDOWN:
                 if event.key == K_SPACE:
                     if g.status == "opening":
+                        s.play_sound("sound/select.mp3", 1.0)
                         g.status = "empty"
                         lottery_result = lottery.lottery()
                         g.next_status = "drop"
@@ -47,12 +50,14 @@ def main():
         chest.tick()
         flash.tick()
         freeze.tick()
+        title.tick()
         display.tick(lottery_result)
 
         background.draw()
         chest.draw()
         flash.draw()
         freeze.draw()
+        title.draw()
         display.draw()
 
         #print(f"g.status={g.status}, g.next_status={g.next_status}")
