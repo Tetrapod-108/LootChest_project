@@ -25,14 +25,13 @@ def main():
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
-                sys.exit()
-            elif event.type == MOUSEBUTTONDOWN:
-                if g.status == "standby":
-                    g.next_status = "zoom"
-                if g.status == "gold_standby":
-                    g.next_status = "zoom"
+                sys.exit()    
             elif event.type == KEYDOWN:
                 if event.key == K_SPACE:
+                    if g.status == "standby":
+                        g.next_status = "zoom"
+                    if g.status == "gold_standby":
+                        g.next_status = "zoom"
                     if g.status == "opening":
                         s.play_sound("sound/select.mp3", 1.0)
                         g.status = "empty"
@@ -63,16 +62,16 @@ def main():
             g.status = g.next_status
             if g.next_status == "standby":
                 tmp = int(lottery_result)
-                print(f"tmp = {tmp}")
-                print(f"tmp / 100 = {int(tmp / 100)}")
-                if int(tmp / 100) == 1:
+                if lottery_result == "101" or lottery_result == "102" or lottery_result == "103":
                     g.next_status = "freeze"
+                    print(f"next_status(freeze) = {g.next_status}")
                 else:
                     g.next_status = "standby"
             elif g.next_status == "gold_standby":
                 g.next_status = "gold_standby"
             else:
                 g.next_status = "empty"
+            print(f"next_status = {g.next_status}\n")
 
         g.process += 1
         pygame.display.update()
